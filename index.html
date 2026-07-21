@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kotak Masukan Wali Murid — MI Tarbiyatul Ulum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#123832;
+    --ink-deep:#0A211D;
+    --paper:#FAF6EC;
+    --paper-soft:#F0EAD8;
+    --gold:#B8863A;
+    --gold-light:#D9AF6B;
+    --sage:#6B8F71;
+    --text:#1A2E28;
+    --text-soft:#5B6E66;
+    --error:#A8432F;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 10%, rgba(184,134,58,0.10), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(107,143,113,0.14), transparent 50%),
+      var(--ink);
+    font-family:'Plus Jakarta Sans', sans-serif;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+  .wrap{width:100%;max-width:560px;}
+  .eyebrow{
+    text-align:center;
+    color:var(--gold-light);
+    font-size:12px;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    font-weight:600;
+    margin-bottom:10px;
+  }
+  .headline{
+    text-align:center;
+    font-family:'Amiri', serif;
+    font-weight:700;
+    color:var(--paper);
+    font-size:clamp(26px,5vw,34px);
+    margin:0 0 8px;
+    line-height:1.25;
+  }
+  .sub{
+    text-align:center;
+    color:#C9D6CC;
+    font-size:14px;
+    line-height:1.6;
+    max-width:420px;
+    margin:0 auto 26px;
+  }
+
+  /* arch card */
+  .arch-top{display:block;width:100%;height:56px;}
+  .card{
+    background:var(--paper);
+    border-radius:4px 4px 18px 18px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+    overflow:hidden;
+  }
+  .pattern{
+    height:14px;
+    background:
+      repeating-linear-gradient(45deg, var(--gold) 0 3px, transparent 3px 12px),
+      repeating-linear-gradient(-45deg, var(--gold) 0 3px, transparent 3px 12px);
+    background-color:var(--paper-soft);
+    opacity:0.55;
+  }
+  .card-inner{padding:34px 30px 28px;}
+
+  .field{margin-bottom:22px;}
+  label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:7px;
+    letter-spacing:0.01em;
+  }
+  label .opt{font-weight:400;color:var(--text-soft);}
+  input[type=text], select, textarea{
+    width:100%;
+    border:none;
+    border-bottom:1.5px solid #CFC6A8;
+    background:transparent;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:15px;
+    color:var(--text);
+    padding:9px 2px;
+    outline:none;
+    transition:border-color .2s ease;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  select{
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%235B6E66' stroke-width='1.6' fill='none' fill-rule='evenodd'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 4px center;
+    padding-right:20px;
+  }
+  textarea{resize:vertical;min-height:96px;line-height:1.55;font-size:15px;}
+  input:focus, select:focus, textarea:focus{border-color:var(--gold);}
+  input:disabled{color:#A9A092;}
+
+  .row2{display:flex;gap:16px;}
+  .row2 .field{flex:1;}
+
+  .anon{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:-6px 0 24px;
+    font-size:13.5px;
+    color:var(--text-soft);
+  }
+  .anon input{width:16px;height:16px;accent-color:var(--ink);flex:none;}
+
+  button{
+    width:100%;
+    border:none;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.02em;
+    padding:14px 16px;
+    border-radius:6px;
+    cursor:pointer;
+    transition:background .2s ease, transform .1s ease;
+  }
+  button:hover{background:var(--ink-deep);}
+  button:active{transform:scale(0.99);}
+  button:disabled{opacity:0.6;cursor:default;}
+
+  .note{
+    display:flex;
+    gap:9px;
+    align-items:flex-start;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid #E4DCC2;
+    font-size:12.5px;
+    color:var(--text-soft);
+    line-height:1.55;
+  }
+  .note svg{flex:none;margin-top:2px;}
+
+  .error-msg{color:var(--error);font-size:12.5px;margin-top:6px;display:none;}
+
+  /* success state */
+  .success{display:none;text-align:center;padding:14px 4px 6px;}
+  .success .circle{
+    width:56px;height:56px;border-radius:50%;
+    background:var(--sage);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;
+  }
+  .success h2{
+    font-family:'Amiri', serif;
+    font-size:22px;
+    margin:0 0 8px;
+    color:var(--ink);
+  }
+  .success p{color:var(--text-soft);font-size:14px;line-height:1.6;margin:0 0 22px;}
+  .success button{background:transparent;color:var(--ink);border:1.5px solid var(--ink);}
+  .success button:hover{background:var(--ink);color:var(--paper);}
+
+  footer{
+    text-align:center;
+    color:#9FB0A6;
+    font-size:11.5px;
+    margin-top:22px;
+    letter-spacing:0.02em;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">MI Tarbiyatul Ulum &middot; Kabupaten Pati</div>
+  <h1 class="headline">Kotak Masukan Wali Murid</h1>
+  <p class="sub">Saran, kritik, maupun apresiasi Bapak/Ibu sangat berarti bagi kemajuan madrasah. Masukan ini hanya diterima dan dibaca oleh pihak sekolah.</p>
+
+  <svg class="arch-top" viewBox="0 0 560 56" preserveAspectRatio="none">
+    <path d="M0 56 L0 30 Q280 -18 560 30 L560 56 Z" fill="#FAF6EC"/>
+    <path d="M0 30 Q280 -18 560 30" fill="none" stroke="#B8863A" stroke-width="2"/>
+  </svg>
+
+  <div class="card">
+    <div class="pattern"></div>
+    <div class="card-inner">
+
+      <form id="feedbackForm">
+        <div class="field">
+          <label for="nama">Nama Wali Murid <span class="opt">(opsional)</span></label>
+          <input type="text" id="nama" placeholder="Nama Bapak/Ibu">
+        </div>
+
+        <div class="anon">
+          <input type="checkbox" id="anon">
+          <label for="anon" style="margin:0;font-weight:400;">Kirim tanpa nama (anonim)</label>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label for="namaSiswa">Nama Siswa <span class="opt">(opsional)</span></label>
+            <input type="text" id="namaSiswa" placeholder="Nama anak">
+          </div>
+          <div class="field">
+            <label for="kelas">Kelas <span class="opt">(opsional)</span></label>
+            <input type="text" id="kelas" placeholder="mis. Kelas III">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="kategori">Kategori Masukan</label>
+          <select id="kategori">
+            <option>Akademik &amp; Pembelajaran</option>
+            <option>Fasilitas &amp; Sarana</option>
+            <option>Layanan Administrasi</option>
+            <option>Kegiatan Keagamaan &amp; Ekstrakurikuler</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="pesan">Isi Masukan</label>
+          <textarea id="pesan" placeholder="Tuliskan saran, kritik, atau apresiasi Bapak/Ibu di sini..."></textarea>
+          <div class="error-msg" id="errPesan">Mohon isi masukan terlebih dahulu.</div>
+        </div>
+
+        <button type="submit" id="submitBtn">Kirim Masukan</button>
+
+        <div class="note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5B6E66" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Masukan langsung tersimpan di sistem internal sekolah dan tidak ditampilkan ke publik atau wali murid lain.</span>
+        </div>
+      </form>
+
+      <div class="success" id="successBox">
+        <div class="circle">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FAF6EC" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2>Terima kasih</h2>
+        <p>Masukan Bapak/Ibu telah kami terima dan akan menjadi bahan evaluasi madrasah.</p>
+        <button type="button" id="resetBtn">Kirim Masukan Lain</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>MI Tarbiyatul Ulum · Kotak Masukan Internal</footer>
+</div>
+
+<script>
+  // GANTI URL DI BAWAH INI dengan URL Web App Google Apps Script Anda setelah deploy.
+  const WEBAPP_URL = "GANTI_DENGAN_URL_WEB_APP_ANDA";
+
+  const form = document.getElementById('feedbackForm');
+  const successBox = document.getElementById('successBox');
+  const submitBtn = document.getElementById('submitBtn');
+  const anonBox = document.getElementById('anon');
+  const namaInput = document.getElementById('nama');
+  const errPesan = document.getElementById('errPesan');
+
+  anonBox.addEventListener('change', () => {
+    namaInput.disabled = anonBox.checked;
+    if (anonBox.checked) namaInput.value = '';
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const pesan = document.getElementById('pesan').value.trim();
+    if (!pesan) {
+      errPesan.style.display = 'block';
+      return;
+    }
+    errPesan.style.display = 'none';
+
+    if (WEBAPP_URL.indexOf('GANTI_DENGAN') === 0) {
+      alert('Website ini belum terhubung ke Google Sheet.\n\nSilakan deploy Google Apps Script terlebih dahulu, lalu ganti nilai WEBAPP_URL di dalam file HTML dengan URL Web App Anda.');
+      return;
+    }
+
+    const data = {
+      nama: anonBox.checked ? 'Anonim' : (namaInput.value.trim() || 'Anonim'),
+      namaSiswa: document.getElementById('namaSiswa').value.trim(),
+      kelas: document.getElementById('kelas').value.trim(),
+      kategori: document.getElementById('kategori').value,
+      pesan: pesan
+    };
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Mengirim...';
+
+    fetch(WEBAPP_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    })
+    .then(() => {
+      form.style.display = 'none';
+      successBox.style.display = 'block';
+    })
+    .catch(() => {
+      alert('Gagal mengirim masukan. Periksa koneksi internet dan coba lagi.');
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Kirim Masukan';
+    });
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    form.reset();
+    namaInput.disabled = false;
+    form.style.display = 'block';
+    successBox.style.display = 'none';
+  });
+</script>
+</body>
+</html>
