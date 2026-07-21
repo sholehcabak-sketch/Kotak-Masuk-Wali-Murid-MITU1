@@ -267,7 +267,41 @@
 
 <script>
   // GANTI URL DI BAWAH INI dengan URL Web App Google Apps Script Anda setelah deploy.
-  const WEBAPP_URL = "GANTI_DENGAN_URL_WEB_APP_ANDA";
+  const WEBAPP_URL = "/**
+ * KODE BACKEND — Kotak Masukan Wali Murid MI Tarbiyatul Ulum
+ * Cara pakai: lihat instruksi setup yang diberikan bersama file ini.
+ */
+
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Masukan');
+  if (!sheet) {
+    sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet('Masukan');
+  }
+  if (sheet.getLastRow() === 0) {
+    sheet.appendRow(['Waktu', 'Nama Wali Murid', 'Nama Siswa', 'Kelas', 'Kategori', 'Isi Masukan']);
+  }
+
+  var data = JSON.parse(e.postData.contents);
+
+  sheet.appendRow([
+    new Date(),
+    data.nama || 'Anonim',
+    data.namaSiswa || '-',
+    data.kelas || '-',
+    data.kategori || '-',
+    data.pesan || ''
+  ]);
+
+  return ContentService
+    .createTextOutput(JSON.stringify({ status: 'success' }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doGet(e) {
+  return ContentService
+    .createTextOutput(JSON.stringify({ status: 'ok', message: 'Endpoint kotak masukan aktif.' }))
+    .setMimeType(ContentService.MimeType.JSON);
+}";
 
   const form = document.getElementById('feedbackForm');
   const successBox = document.getElementById('successBox');
